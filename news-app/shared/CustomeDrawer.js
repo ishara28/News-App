@@ -24,6 +24,11 @@ export default class CustomDrawer extends Component {
     this.items = [
       {
         navOptionThumb: "home",
+        navOptionName: "Home",
+        screenToNavigate: "Home",
+      },
+      {
+        navOptionThumb: "home",
         navOptionName: "Local",
         screenToNavigate: "Local",
       },

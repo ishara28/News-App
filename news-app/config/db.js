@@ -13,6 +13,6 @@ let firebaseConfig = {
 
 let app = firebase.initializeApp(firebaseConfig);
 
-export const db = app.database();
+export const firebasedb = app.database();
 
 

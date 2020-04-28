@@ -1,35 +1,36 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import FlexImage from "react-native-flex-image";
-FlexImage;
+import TimeAgo from "react-native-timeago";
 
 export class NewsHeading extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      url:
-        "https://firebasestorage.googleapis.com/v0/b/news-app-15023.appspot.com/o/images%2Fterry-vlisidis-WsEbnsnKbUE-unsplash.jpg?alt=media&token=e04fd5d1-69ef-4478-ade1-cc98d1ccf9ab",
-    };
+    this.state = {};
   }
 
   render() {
     return (
       <TouchableOpacity
+        style={{ flexDirection: "row", margin: 5 }}
         onPress={this.props.pressHandler}
-        style={{ flexDirection: "row", margin: 3 }}
       >
-        <View style={{ flex: 1, margin: 3 }}>
+        <View
+          style={{
+            flex: 1,
+            margin: 3,
+            borderRadius: 5,
+            overflow: "hidden",
+          }}
+        >
           <FlexImage
-            // source={require("../../assets/1.jpg")}
-            source={{ uri: this.state.url }}
+            source={{ uri: this.props.news.headerImgUrl }}
             style={{ borderRadius: 5 }}
           />
         </View>
-        <View
-          style={{ flex: 3, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text>කොළඹ ඇතුලු අධි අවධානම් කලාපයේ ඇඳිරිනීතිය සඳුදා ඉවතට.</Text>
+        <View style={{ flex: 3, justifyContent: "center" }}>
+          <Text>{this.props.news.header}</Text>
         </View>
       </TouchableOpacity>
     );

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 import { storage, firebasedb } from "../config/firebasedb";
+import { FaFileExcel } from "react-icons/fa";
 
 export class AddNews extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export class AddNews extends Component {
       headerImgUrl: "",
       newsImages: [],
       progress: 0,
+      isUploading: false,
     };
   }
 
@@ -40,6 +42,7 @@ export class AddNews extends Component {
   };
 
   handleUpload = () => {
+    this.setState({ isUploading: true });
     const { headerImage } = this.state;
     const uploadTask = storage
       .ref("images/" + headerImage.name)
@@ -67,80 +70,98 @@ export class AddNews extends Component {
             console.log(url);
             this.setState({ headerImgUrl: url });
             this.submitData();
+            this.setState({ isUploading: false });
           });
       }
     );
   };
 
   render() {
-    return (
-      <div className="container" style={{ width: "60%" }}>
-        <Form>
-          <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label style={{ float: "left" }}>
-              <b>News Header</b>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="news header here..."
-              value={this.state.header}
-              onChange={(e) => this.setState({ header: e.target.value })}
-            />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlSelect1">
-            <Form.Label style={{ float: "left" }}>
-              <b>News Type</b>
-            </Form.Label>
-            <Form.Control
-              as="select"
-              value={this.state.newsType}
-              onChange={(e) => this.setState({ newsType: e.target.value })}
-            >
-              <option>Choose Type</option>
-              <option>Local</option>
-              <option>International</option>
-              <option>Entertainment</option>
-              <option>Sports</option>
-              <option>Weather</option>
-              <option>Political</option>
-            </Form.Control>
-          </Form.Group>
+    if (this.state.isUploading) {
+      return (
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <Spinner animation="grow" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="container" style={{ width: "60%" }}>
+          <Form>
+            <Form.Group controlId="exampleForm.ControlInput1">
+              <Form.Label style={{ float: "left" }}>
+                <b>News Header</b>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="news header here..."
+                value={this.state.header}
+                onChange={(e) => this.setState({ header: e.target.value })}
+              />
+            </Form.Group>
+            <Form.Group controlId="exampleForm.ControlSelect1">
+              <Form.Label style={{ float: "left" }}>
+                <b>News Type</b>
+              </Form.Label>
+              <Form.Control
+                as="select"
+                value={this.state.newsType}
+                onChange={(e) => this.setState({ newsType: e.target.value })}
+              >
+                <option>Choose Type</option>
+                <option>Local</option>
+                <option>International</option>
+                <option>Entertainment</option>
+                <option>Sports</option>
+                <option>Weather</option>
+                <option>Political</option>
+              </Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="exampleForm.ControlTextarea1">
-            <Form.Label style={{ float: "left" }}>
-              <b>News Content</b>
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              value={this.state.newsContent}
-              onChange={(e) =>
-                this.setState({
-                  newsContent: e.target.value,
-                })
-              }
-            />
-          </Form.Group>
-          <Form.Group controlId="exampleForm.ControlFile">
-            <Form.Label style={{ float: "left" }}>
-              <b>Header Photo</b>
-            </Form.Label>
-            <Form.Control type="file" onChange={this.handleChange} />
-          </Form.Group>
-          <Button variant="primary" onClick={this.handleUpload}>
-            Submit News
-          </Button>
-        </Form>
-        <br />
-        <progress value={this.state.progress} max="100" /> <br />
-        <img
-          src={this.state.headerImgUrl || "http://via.placeholder.com/400x300"}
-          alt="Uploaded images"
-          height="300"
-          width="400"
-        />
-      </div>
-    );
+            <Form.Group controlId="exampleForm.ControlTextarea1">
+              <Form.Label style={{ float: "left" }}>
+                <b>News Content</b>
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="3"
+                value={this.state.newsContent}
+                onChange={(e) =>
+                  this.setState({
+                    newsContent: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group controlId="exampleForm.ControlFile">
+              <Form.Label style={{ float: "left" }}>
+                <b>Header Photo</b>
+              </Form.Label>
+              <Form.Control type="file" onChange={this.handleChange} />
+            </Form.Group>
+            <Button variant="primary" onClick={this.handleUpload}>
+              Submit News
+            </Button>
+          </Form>
+          <br />
+          <progress value={this.state.progress} max="100" /> <br />
+          <img
+            src={
+              this.state.headerImgUrl || "http://via.placeholder.com/400x300"
+            }
+            alt="Uploaded images"
+            height="300"
+            width="400"
+          />
+        </div>
+      );
+    }
   }
 }
 

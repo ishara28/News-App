@@ -9,9 +9,13 @@ import LocalStack from "../stack/LocalStack";
 import InternationalStack from "../stack/InternationalStack";
 import SportsStack from "../stack/SportsStack";
 import WeatherStack from "../stack/WeatherStack";
+import HomeStack from "../stack/HomeStack";
 
 const rootDrawNavigator = createDrawerNavigator(
   {
+    Home: {
+      screen: HomeStack,
+    },
     Local: {
       screen: LocalStack,
     },

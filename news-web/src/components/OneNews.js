@@ -55,7 +55,7 @@ export class OneNews extends Component {
             </Card.Header>
             <Accordion.Collapse eventKey="0">
               <Card.Body style={{ textAlign: "justify" }}>
-                {this.props.news.newsContent}
+                {this.props.news.newsContent.replace("\n", "\\\n")}
               </Card.Body>
             </Accordion.Collapse>
           </Card>
