@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import FlexImage from "react-native-flex-image";
-import TimeAgo from "react-native-timeago";
 
 export class NewsHeading extends Component {
   constructor(props) {

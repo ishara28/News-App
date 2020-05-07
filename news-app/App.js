@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Navigator from "./routes/drawer/RootDrawer";
 import configureStore from "./redux/Store";
 import { Provider } from "react-redux";
-import AppContainer from "./notifications/Notifications";
 
 const Store = configureStore();
 

@@ -7,9 +7,9 @@ import CustomDrawer from "../../shared/CustomeDrawer";
 import { createAppContainer } from "react-navigation";
 import LocalStack from "../stack/LocalStack";
 import InternationalStack from "../stack/InternationalStack";
-import SportsStack from "../stack/SportsStack";
 import WeatherStack from "../stack/WeatherStack";
 import HomeStack from "../stack/HomeStack";
+import SportsStack from "../stack/SportsStack";
 
 const rootDrawNavigator = createDrawerNavigator(
   {
