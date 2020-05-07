@@ -6,6 +6,33 @@ import { H1, H2, H3 } from "native-base";
 import { ScrollView } from "react-native-gesture-handler";
 
 export class NewsDetails extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+  }
+
+  getExtraImages = () => {
+    this.props.navigation.getParam("news").imagesUrls.map((url) => {
+      return (
+        <View
+          style={{
+            overflow: "hidden",
+            borderRadius: 7,
+            margin: 10,
+            marginHorizontal: 25,
+          }}
+        >
+          <FlexImage
+            source={{
+              uri: url,
+            }}
+          />
+        </View>
+      );
+    });
+  };
+
   render() {
     return (
       <ScrollView>
@@ -44,6 +71,29 @@ export class NewsDetails extends Component {
           <Text style={{ textAlign: "justify" }}>
             {this.props.navigation.getParam("news").newsContent}
           </Text>
+        </View>
+        <View>
+          {this.props.navigation.getParam("news").imagesUrls.map((url) => {
+            if (url != "") {
+              return (
+                <View
+                  style={{
+                    overflow: "hidden",
+                    borderRadius: 7,
+                    margin: 10,
+                    marginHorizontal: 25,
+                  }}
+                >
+                  <FlexImage
+                    source={{
+                      uri: url,
+                    }}
+                    alt="HJ"
+                  />
+                </View>
+              );
+            }
+          })}
         </View>
       </ScrollView>
     );

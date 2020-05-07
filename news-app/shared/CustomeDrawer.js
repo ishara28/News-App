@@ -37,11 +37,6 @@ export default class CustomDrawer extends Component {
         navOptionName: "International",
         screenToNavigate: "International",
       },
-      {
-        navOptionThumb: "home",
-        navOptionName: "Sports",
-        screenToNavigate: "Sports",
-      },
     ];
   }
   render() {

@@ -24,6 +24,7 @@ export class Home extends Component {
           id: news,
           header: newsList[news].header,
           headerImgUrl: newsList[news].headerImgUrl,
+          imagesUrls: newsList[news].imagesUrls,
           newsType: newsList[news].newsType,
           newsContent: newsList[news].newsContent,
           date: newsList[news].date,

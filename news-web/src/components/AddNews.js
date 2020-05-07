@@ -13,9 +13,11 @@ export class AddNews extends Component {
       newsContent: "",
       headerImage: null,
       headerImgUrl: "",
-      newsImages: [],
+      images: [],
+      imagesUrls: [],
       progress: 0,
       isUploading: false,
+      preview: [],
     };
   }
 
@@ -26,10 +28,28 @@ export class AddNews extends Component {
     }
   };
 
+  handleChangeMultipleImages = (e) => {
+    for (let i = 0; i < e.target.files.length; i++) {
+      const newImage = e.target.files[i];
+      const path = URL.createObjectURL(e.target.files[i]);
+      newImage["id"] = Math.random();
+      // add an "id" property to each File object
+      // setFiles((prevState) => [...prevState, newFile]);
+      this.setState((prevState) => {
+        return {
+          ...prevState,
+          images: [...prevState.images, newImage],
+          preview: [...prevState.preview, path],
+        };
+      });
+    }
+  };
+
   submitData = () => {
     firebasedb.ref("news").push({
       header: this.state.header,
       headerImgUrl: this.state.headerImgUrl,
+      imagesUrls: this.state.imagesUrls,
       newsType: this.state.newsType,
       newsContent: this.state.newsContent,
       date:
@@ -69,12 +89,96 @@ export class AddNews extends Component {
           .then((url) => {
             console.log(url);
             this.setState({ headerImgUrl: url });
-            this.submitData();
+            // this.submitData();
+            this.handleUploadMultipleImages();
             this.setState({ isUploading: false });
           });
       }
     );
   };
+
+  //handle upload multiple images
+
+  handleUploadMultipleImages = (e) => {
+    // e.preventDefault();
+    if (this.state.images.length > 0) {
+      console.log(this.state.images.length);
+      this.setState({ isUploading: true });
+      const promises = [];
+      let counter = 0;
+      // this.setState({ isUploading: true });
+      const { images } = this.state;
+      images.forEach((image) => {
+        const uploadTask = storage.ref("images/" + image.name).put(image);
+        promises.push(uploadTask);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            //progress function
+            // const progress =
+            //   Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // this.setState({ progress });
+          },
+          (error) => {
+            //error function
+            console.log(error);
+          },
+          () => {
+            //complete function
+            storage
+              .ref("images")
+              .child(image.name)
+              .getDownloadURL()
+              .then((url) => {
+                this.setState(
+                  (prevState) => {
+                    return {
+                      ...prevState,
+                      imagesUrls: [...prevState.imagesUrls, url],
+                    };
+                  },
+                  () => {
+                    counter++;
+                    console.log(counter, url);
+                    if (
+                      this.state.images.length == this.state.imagesUrls.length
+                    ) {
+                      this.submitData();
+                      this.setState({ isUploading: false });
+                      setTimeout(() => {
+                        this.setState({
+                          header: "",
+                          newsType: "",
+                          newsContent: "",
+                          headerImage: null,
+                          headerImgUrl: "",
+                          images: [],
+                          imagesUrls: [],
+                          progress: 0,
+                          isUploading: false,
+                          preview: [],
+                        });
+                      }, 4000);
+                      alert("Submitted Successfully!");
+                    }
+                  }
+                );
+                this.setState({ isUploading: false });
+              });
+          }
+        );
+      });
+    } else {
+      this.setState(
+        {
+          imagesUrls: [""],
+        },
+        () => this.submitData()
+      );
+    }
+  };
+
+  //////////////
 
   render() {
     if (this.state.isUploading) {
@@ -144,6 +248,19 @@ export class AddNews extends Component {
                 <b>Header Photo</b>
               </Form.Label>
               <Form.Control type="file" onChange={this.handleChange} />
+            </Form.Group>
+
+            {/* Multiple photos upload  */}
+            <Form.Group controlId="exampleForm.ControlFile">
+              <Form.Label style={{ float: "left" }}>
+                <b>Extra Photos (If have)</b>
+              </Form.Label>
+              <Form.Control
+                type="file"
+                onChange={this.handleChangeMultipleImages}
+                multiple
+                label={"Choose Photos"}
+              />
             </Form.Group>
             <Button variant="primary" onClick={this.handleUpload}>
               Submit News
