@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  VirtualizedList,
+} from "react-native";
 import NewsHeading from "./news/NewsHeading";
 import { firebasedb } from "../config/db";
 import PTRView from "react-native-pull-to-refresh";
 import { FlatList } from "react-native-gesture-handler";
+import { Button, Spinner } from "native-base";
 
 export class Home extends Component {
   constructor(props) {
@@ -11,29 +19,37 @@ export class Home extends Component {
 
     this.state = {
       newsList: [],
+      loading: true,
     };
   }
+  componentDidMount() {
+    this.getData();
+  }
 
-  componentDidMount = () => {
-    firebasedb.ref("/news").on("value", (querySnapshot) => {
-      let data = querySnapshot.val() ? querySnapshot.val() : {};
-      let newsList = { ...data };
-      let newState = [];
-      for (let news in newsList) {
-        newState.push({
-          id: news,
-          header: newsList[news].header,
-          headerImgUrl: newsList[news].headerImgUrl,
-          imagesUrls: newsList[news].imagesUrls,
-          newsType: newsList[news].newsType,
-          newsContent: newsList[news].newsContent,
-          date: newsList[news].date,
+  getData = () => {
+    firebasedb
+      .ref("/news")
+      .limitToFirst(45)
+      .on("value", (querySnapshot) => {
+        let data = querySnapshot.val() ? querySnapshot.val() : {};
+        let newsList = { ...data };
+        let newState = [];
+        for (let news in newsList) {
+          newState.push({
+            id: news,
+            header: newsList[news].header,
+            headerImgUrl: newsList[news].headerImgUrl,
+            imagesUrls: newsList[news].imagesUrls,
+            newsType: newsList[news].newsType,
+            newsContent: newsList[news].newsContent,
+            date: newsList[news].date,
+          });
+        }
+        this.setState({
+          newsList: newState,
+          loading: false,
         });
-      }
-      this.setState({
-        newsList: newState,
       });
-    });
   };
 
   refresh = () => {
@@ -44,37 +60,59 @@ export class Home extends Component {
     });
   };
 
+  renderFlatList = () => {
+    let copied = [...this.state.newsList];
+    return (
+      <View>
+        <FlatList
+          data={copied.reverse()}
+          renderItem={({ item }) => (
+            <NewsHeading
+              news={item}
+              pressHandler={() =>
+                this.props.navigation.navigate("NewsDetails", {
+                  news: item,
+                })
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          initialNumToRender={1}
+          maxToRenderPerBatch={1}
+          windowSize={2}
+          removeClippedSubviews={true}
+          // onEndReached={() => this.getData()}
+        />
+      </View>
+    );
+  };
+
+  getItemCount = (data) => {
+    return 50;
+  };
+
   render() {
     let copied = [...this.state.newsList];
 
-    return (
-      <PTRView onRefresh={this.refresh}>
-        <ScrollView>
-          {/* {copied.reverse().map((news) => {
-            return (
-              <NewsHeading
-                news={news}
-                pressHandler={() =>
-                  this.props.navigation.navigate("NewsDetails", { news: news })
-                }
-              />
-            );
-          })} */}
-
-          <FlatList
-            data={copied.reverse()}
-            renderItem={({ item }) => (
-              <NewsHeading
-                news={item}
-                pressHandler={() =>
-                  this.props.navigation.navigate("NewsDetails", { news: item })
-                }
-              />
-            )}
-          />
-        </ScrollView>
-      </PTRView>
-    );
+    if (this.state.loading) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spinner color="black" />
+        </View>
+      );
+    } else {
+      return (
+        <PTRView onRefresh={this.refresh}>
+          <ScrollView>{this.renderFlatList()}</ScrollView>
+        </PTRView>
+      );
+    }
   }
 }
 

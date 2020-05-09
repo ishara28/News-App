@@ -11,6 +11,7 @@ import {
 import { Icon, Footer } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native-gesture-handler";
+import FlexImage from "react-native-flex-image";
 
 export default class CustomDrawer extends Component {
   constructor() {
@@ -52,18 +53,16 @@ export default class CustomDrawer extends Component {
         <ScrollView style={{ flex: 1 }}>
           <View style={styles.sideMenuContainer}>
             {/*Top Large Image */}
-            {/* <Image
-              source={require("../assets/icons/title.png")}
+            <FlexImage
+              // source={require("../assets/cmbprofile.png")}
+              // source={require("../assets/cmbprofile.png")}
+              source={require("../assets/cmbprofile.png")}
               style={{
                 width: Dimensions.get("window").width - 150,
-                height: 50,
-                marginTop: 10,
+                height: 100,
               }}
             />
-            <Image
-              source={require("../assets/icons/start2.png")}
-              style={styles.sideMenuProfileIcon}
-            /> */}
+
             {/*Divider between Top Image and Sidebar Option*/}
             <View
               style={{
@@ -76,7 +75,7 @@ export default class CustomDrawer extends Component {
             {/*Setting up Navigation Options from option array using loop*/}
 
             <View style={{ width: "100%" }}>
-              {this.items.map((item, key) => (
+              {/* {this.items.map((item, key) => (
                 <View
                   style={{
                     flexDirection: "row",
@@ -115,7 +114,249 @@ export default class CustomDrawer extends Component {
                     </View>
                   </View>
                 </View>
-              ))}
+              ))} */}
+
+              {/* Home Navigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon name={"home"} style={{ color: "#ddd" }} size={25} />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("Home");
+                      }}
+                    >
+                      {"Home"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Local Navigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("Local");
+                      }}
+                    >
+                      {"Local"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* International Navigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("International");
+                      }}
+                    >
+                      {"International"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Sports Navigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("Sports");
+                      }}
+                    >
+                      {"Sports"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Weather NAvigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("Weather");
+                      }}
+                    >
+                      {"Weather"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Entertainment NAvigation  */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"home"}
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
+                      }}
+                      onPress={() => {
+                        // global.currentScreenIndex = key;
+                        this.props.navigation.navigate("Entertainment");
+                      }}
+                    >
+                      {"Entertainment"}
+                    </Text>
+                  </View>
+                </View>
+              </View>
             </View>
             <View
               style={{ alignContent: "flex-start", alignItems: "flex-end" }}

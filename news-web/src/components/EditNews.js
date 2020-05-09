@@ -39,12 +39,7 @@ export class EditNews extends Component {
       headerImgUrl: this.state.headerImgUrl,
       newsType: this.state.newsType,
       newsContent: this.state.newsContent,
-      date:
-        new Date().getFullYear().toString() +
-        "/" +
-        new Date().getMonth().toString() +
-        "/" +
-        new Date().getDate().toString(),
+      date: Date.now(),
     };
 
     firebasedb

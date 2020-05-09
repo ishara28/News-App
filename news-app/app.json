@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "news-app",
-    "slug": "news-app",
+    "name": "Colombo Times",
+    "slug": "colombo-times-4",
     "platforms": [
       "ios",
       "android",
@@ -9,9 +9,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/appicon.png",
     "splash": {
-      "image": "./assets/final.png",
+      "image": "./assets/colombotimes.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -21,6 +21,11 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.codezone.colombotimes",
+      "versionCode": 1
+    },
     "ios": {
       "supportsTablet": true
     },

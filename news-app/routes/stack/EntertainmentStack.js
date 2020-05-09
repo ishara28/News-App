@@ -7,15 +7,15 @@ import { setTheme } from "../../redux/actions/Themes";
 import React, { Component } from "react";
 import { View } from "react-native";
 import NewsDetails from "../../screens/news/NewsDetails";
-import Weather from "../../screens/Weather";
+import Entertainment from "../../screens/Entertainment";
 
 const screens = {
-  Weather: {
-    screen: Weather,
+  Entertainment: {
+    screen: Entertainment,
     navigationOptions: ({ navigation }) => {
       return {
         headerTitle: () => (
-          <Header navigation={navigation} headerText="Weather News" />
+          <Header navigation={navigation} headerText="Entertainment News" />
         ),
       };
     },
@@ -25,7 +25,7 @@ const screens = {
   },
 };
 
-const WeatherStack = createStackNavigator(screens, {
+const EntertainmentStack = createStackNavigator(screens, {
   defaultNavigationOptions: {
     headerTintColor: "#ddd",
     headerStyle: {
@@ -47,4 +47,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(WeatherStack);
+export default connect(mapStateToProps, mapDispatchToProps)(EntertainmentStack);

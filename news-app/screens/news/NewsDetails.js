@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import FlexImage from "react-native-flex-image";
 import { View, Text } from "react-native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { H1, H2, H3 } from "native-base";
+import { H1, H2, H3, Icon } from "native-base";
+import TimeAgo from "react-native-timeago";
 import { ScrollView } from "react-native-gesture-handler";
 
 export class NewsDetails extends Component {
@@ -45,7 +46,7 @@ export class NewsDetails extends Component {
         </View>
         <View
           style={{
-            backgroundColor: "#4c4444",
+            backgroundColor: "black",
             padding: 6,
             marginHorizontal: 10,
             borderRadius: 7,
@@ -62,10 +63,25 @@ export class NewsDetails extends Component {
             {this.props.navigation.getParam("news").header}
           </Text>
         </View>
+        <View style={{ flex: 1, flexDirection: "row-reverse", marginTop: 10 }}>
+          <TimeAgo
+            time={this.props.navigation.getParam("news").date}
+            style={{
+              fontSize: RFPercentage(1.5),
+              color: "#494646",
+              marginRight: 20,
+            }}
+          />
+          <Icon
+            type="Feather"
+            name="clock"
+            style={{ fontSize: RFPercentage(1.8), marginRight: 3 }}
+          />
+        </View>
         <View
           style={{
             marginHorizontal: 20,
-            marginTop: 20,
+            marginTop: 5,
           }}
         >
           <Text style={{ textAlign: "justify" }}>

@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import FlexImage from "react-native-flex-image";
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import TimeAgo from "react-native-timeago";
+import { Icon } from "native-base";
 
-export class NewsHeading extends Component {
+export class NewsHeading extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -11,27 +14,44 @@ export class NewsHeading extends Component {
 
   render() {
     return (
-      <TouchableOpacity
-        style={{ flexDirection: "row", margin: 5 }}
-        onPress={this.props.pressHandler}
-      >
-        <View
-          style={{
-            flex: 1,
-            margin: 3,
-            borderRadius: 5,
-            overflow: "hidden",
-          }}
+      <View>
+        <TouchableOpacity
+          style={{ flexDirection: "row", margin: 5 }}
+          onPress={this.props.pressHandler}
         >
-          <FlexImage
-            source={{ uri: this.props.news.headerImgUrl }}
-            style={{ borderRadius: 5 }}
+          <View
+            style={{
+              flex: 1,
+              margin: 3,
+              borderRadius: 5,
+              overflow: "hidden",
+            }}
+          >
+            <FlexImage
+              source={{ uri: this.props.news.headerImgUrl }}
+              // style={{ borderRadius: 5 }}
+            />
+          </View>
+          <View style={{ flex: 2, justifyContent: "center" }}>
+            <Text>{this.props.news.header}</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ flex: 1, flexDirection: "row-reverse" }}>
+          <TimeAgo
+            time={this.props.news.date}
+            style={{
+              fontSize: RFPercentage(1.5),
+              color: "#494646",
+              marginRight: 20,
+            }}
+          />
+          <Icon
+            type="Feather"
+            name="clock"
+            style={{ fontSize: RFPercentage(1.8), marginRight: 3 }}
           />
         </View>
-        <View style={{ flex: 3, justifyContent: "center" }}>
-          <Text>{this.props.news.header}</Text>
-        </View>
-      </TouchableOpacity>
+      </View>
     );
   }
 }

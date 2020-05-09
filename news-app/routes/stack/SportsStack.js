@@ -51,7 +51,7 @@ const screens = {
 
 const SportsStack = createStackNavigator(screens, {
   defaultNavigationOptions: {
-    headerTintColor: "#444",
+    headerTintColor: "#ddd",
     headerStyle: {
       backgroundColor: "black",
       height: 80,

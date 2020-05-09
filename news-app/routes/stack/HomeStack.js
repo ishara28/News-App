@@ -8,6 +8,7 @@ import { View } from "react-native";
 import NewsDetails from "../../screens/news/NewsDetails";
 import Home from "../../screens/Home";
 
+
 class HomeStackClass extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,7 @@ const screens = {
 
 const HomeStack = createStackNavigator(screens, {
   defaultNavigationOptions: {
-    headerTintColor: "#444",
+    headerTintColor: "#ddd",
     headerStyle: {
       backgroundColor: "black",
       height: 80,

@@ -21,7 +21,7 @@ export class International extends Component {
   }
 
   componentDidMount = () => {
-    firebasedb.ref("/news").on("value", (querySnapshot) => {
+    firebasedb.ref("/news").limitToFirst(50).on("value", (querySnapshot) => {
       let data = querySnapshot.val() ? querySnapshot.val() : {};
       let newsList = { ...data };
       let newState = [];
@@ -31,6 +31,7 @@ export class International extends Component {
             id: news,
             header: newsList[news].header,
             headerImgUrl: newsList[news].headerImgUrl,
+            imagesUrls: newsList[news].imagesUrls,
             newsType: newsList[news].newsType,
             newsContent: newsList[news].newsContent,
             date: newsList[news].date,

@@ -10,6 +10,7 @@ import InternationalStack from "../stack/InternationalStack";
 import WeatherStack from "../stack/WeatherStack";
 import HomeStack from "../stack/HomeStack";
 import SportsStack from "../stack/SportsStack";
+import EntertainmentStack from "../stack/EntertainmentStack";
 
 const rootDrawNavigator = createDrawerNavigator(
   {
@@ -27,6 +28,9 @@ const rootDrawNavigator = createDrawerNavigator(
     },
     Weather: {
       screen: WeatherStack,
+    },
+    Entertainment: {
+      screen: EntertainmentStack,
     },
   },
   {

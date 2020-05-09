@@ -52,12 +52,13 @@ export class AddNews extends Component {
       imagesUrls: this.state.imagesUrls,
       newsType: this.state.newsType,
       newsContent: this.state.newsContent,
-      date:
-        new Date().getFullYear().toString() +
-        "/" +
-        new Date().getMonth().toString() +
-        "/" +
-        new Date().getDate().toString(),
+      // date:
+      //   new Date().getFullYear().toString() +
+      //   "/" +
+      //   new Date().getMonth().toString() +
+      //   "/" +
+      //   new Date().getDate().toString(),
+      date: Date.now(),
     });
   };
 
@@ -224,7 +225,6 @@ export class AddNews extends Component {
                 <option>Entertainment</option>
                 <option>Sports</option>
                 <option>Weather</option>
-                <option>Political</option>
               </Form.Control>
             </Form.Group>
 
