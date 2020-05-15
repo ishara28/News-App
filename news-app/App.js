@@ -10,6 +10,8 @@ import Test from "./test/Test";
 import * as Permissions from "expo-permissions";
 import { firebasedb } from "./config/db";
 import Constants from "expo-constants";
+import { Vibration, Platform, View } from "react-native";
+import { auth } from "firebase";
 
 const Store = configureStore();
 
@@ -24,55 +26,37 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    this.registerForPushNotificationsAsync();
-
-    // Handle notifications that are received or selected while the app
-    // is open. If the app was closed and then opened by tapping the
-    // notification (rather than just tapping the app icon to open it),
-    // this function will fire on the next tick after the app starts
-    // with the notification data.
-    this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
-    );
-  }
-
-  _handleNotification = (notification) => {
-    Vibration.vibrate();
-    console.log(notification);
-    this.setState({ notification: notification });
-  };
-
-  // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/dashboard/notifications
-  sendPushNotification = async () => {
-    const message = {
-      to: this.state.expoPushToken,
-      sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
-      data: { data: "goes here" },
-      _displayInForeground: true,
-    };
-    const response = await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
-    });
-
+    // firebase
+    //   .auth()
+    //   .signInAnonymously()
+    //   .then((user) => {
+    //     this.registerForPushNotificationsAsync(user);
+    //   });
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
-  };
+    // auth()
+    //   .signInAnonymously()
+    //   .then(() => {
+    //     console.log("User signed in anonymously");
+    //   })
+    //   .catch((error) => {
+    //     if (error.code === "auth/operation-not-allowed") {
+    //       console.log("Enable anonymous in your firebase console.");
+    //     }
+    //     console.error(error);
+    //   });
+    // auth().onAuthStateChanged((firebaseUser) => {
+    //   firebasedb.ref("users").push({
+    //     uid: firebaseUser.uid,
+    //   });
+    // });
+  }
 
-  //Register for push notifications
-
-  registerForPushNotificationsAsync = async () => {
+  registerForPushNotificationsAsync = async (user) => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
@@ -90,7 +74,9 @@ export default class App extends React.Component {
       }
       token = await Notifications.getExpoPushTokenAsync();
       console.log(token);
-      this.setState({ expoPushToken: token });
+      var updates = {};
+      updates["/expoToken"] = token;
+      firebasedb.ref("users").child(user.uid).update(updates);
     } else {
       alert("Must use physical device for Push Notifications");
     }
@@ -103,9 +89,6 @@ export default class App extends React.Component {
         vibrate: [0, 250, 250, 250],
       });
     }
-    var updates = {};
-    updates["/expoToken"] = await Notifications.getExpoPushTokenAsync();
-    firebasedb.ref("users").push(updates);
   };
 
   render() {
@@ -116,16 +99,7 @@ export default class App extends React.Component {
     return (
       <Provider store={Store}>
         <Container>
-          <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Text>Origin: {this.state.notification.origin}</Text>
-            <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
-          </View>
-          <Button
-            title={"Press to Send Notification"}
-            onPress={() => this.sendPushNotification()}
-          />
           <Navigator />
-          {/* <Test /> */}
         </Container>
       </Provider>
     );

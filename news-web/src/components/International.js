@@ -3,7 +3,7 @@ import { firebasedb } from "../config/firebasedb";
 import OneNews from "./OneNews";
 import { Spinner } from "react-bootstrap";
 
-export class Home extends Component {
+export class International extends Component {
   constructor(props) {
     super(props);
 
@@ -22,15 +22,17 @@ export class Home extends Component {
         let newsList = { ...data };
         let newState = [];
         for (let news in newsList) {
-          newState.push({
-            id: news,
-            header: newsList[news].header,
-            headerImgUrl: newsList[news].headerImgUrl,
-            imagesUrls: newsList[news].imagesUrls,
-            newsType: newsList[news].newsType,
-            newsContent: newsList[news].newsContent,
-            date: newsList[news].date,
-          });
+          if (newsList[news].newsType == "International") {
+            newState.push({
+              id: news,
+              header: newsList[news].header,
+              headerImgUrl: newsList[news].headerImgUrl,
+              imagesUrls: newsList[news].imagesUrls,
+              newsType: newsList[news].newsType,
+              newsContent: newsList[news].newsContent,
+              date: newsList[news].date,
+            });
+          }
         }
         this.setState(
           {
@@ -76,4 +78,4 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default International;

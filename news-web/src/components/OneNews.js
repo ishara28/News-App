@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { FaHandPointRight } from "react-icons/fa";
 import { Button, Col, Row, Card, Accordion, Modal } from "react-bootstrap";
 import EditNews from "./EditNews";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 export class OneNews extends Component {
   constructor(props) {
@@ -11,6 +13,23 @@ export class OneNews extends Component {
       modalShow: false,
     };
   }
+
+  confirmDltAlert = () => {
+    confirmAlert({
+      title: <p style={{ color: "black" }}>Confirm Deletion!</p>,
+      message: "Are you sure to delete this?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => this.props.handleDelete(),
+        },
+        {
+          label: "No",
+          // onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
 
   render() {
     return (
@@ -34,14 +53,18 @@ export class OneNews extends Component {
               </Button>{" "}
               <span>&nbsp;&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
-              <Button variant="danger" onClick={this.props.handleDelete}>
+              <Button variant="danger" onClick={this.confirmDltAlert}>
                 Delete
-              </Button>{" "}
+              </Button>
+              {"           "}
               <span>&nbsp;&nbsp;</span>
+              <p style={{ textDecoration: "underline" }}>
+                {this.props.news.newsType}
+              </p>
             </Row>
           </Col>
         </div>
-        <Accordion>
+        {/* <Accordion>
           <Card>
             <Card.Header style={{ backgroundColor: "#343A40" }}>
               <Accordion.Toggle
@@ -59,7 +82,8 @@ export class OneNews extends Component {
               </Card.Body>
             </Accordion.Collapse>
           </Card>
-        </Accordion>
+        </Accordion> */}
+        <hr style={{ borderWidth: 5, borderColor: "black" }} />
         <EditNews
           news={this.props.news}
           show={this.state.modalShow}

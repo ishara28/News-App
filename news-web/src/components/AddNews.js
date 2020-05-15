@@ -63,39 +63,46 @@ export class AddNews extends Component {
   };
 
   handleUpload = () => {
-    this.setState({ isUploading: true });
-    const { headerImage } = this.state;
-    const uploadTask = storage
-      .ref("images/" + headerImage.name)
-      .put(headerImage);
+    if (
+      this.state.header &&
+      this.state.newsType &&
+      this.state.newsContent &&
+      this.state.headerImage
+    ) {
+      this.setState({ isUploading: true });
+      const { headerImage } = this.state;
+      const uploadTask = storage
+        .ref("images/" + headerImage.name)
+        .put(headerImage);
 
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        //progress function
-        const progress =
-          Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.setState({ progress });
-      },
-      (error) => {
-        //error function
-        console.log(error);
-      },
-      () => {
-        //complete function
-        storage
-          .ref("images")
-          .child(headerImage.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-            this.setState({ headerImgUrl: url });
-            // this.submitData();
-            this.handleUploadMultipleImages();
-            this.setState({ isUploading: false });
-          });
-      }
-    );
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          //progress function
+          const progress =
+            Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.setState({ progress });
+        },
+        (error) => {
+          //error function
+          console.log(error);
+        },
+        () => {
+          //complete function
+          storage
+            .ref("images")
+            .child(headerImage.name)
+            .getDownloadURL()
+            .then((url) => {
+              console.log(url);
+              this.setState({ headerImgUrl: url });
+              // this.submitData();
+              this.handleUploadMultipleImages();
+              this.setState({ isUploading: false });
+            });
+        }
+      );
+    }
   };
 
   //handle upload multiple images
@@ -222,8 +229,9 @@ export class AddNews extends Component {
                 <option>Choose Type</option>
                 <option>Local</option>
                 <option>International</option>
-                <option>Entertainment</option>
+                <option>Political</option>
                 <option>Sports</option>
+                <option>Entertainment</option>
                 <option>Weather</option>
               </Form.Control>
             </Form.Group>
@@ -262,12 +270,15 @@ export class AddNews extends Component {
                 label={"Choose Photos"}
               />
             </Form.Group>
-            <Button variant="primary" onClick={this.handleUpload}>
+            <Button
+              style={{ backgroundColor: "black" }}
+              onClick={this.handleUpload}
+            >
               Submit News
             </Button>
           </Form>
           <br />
-          <progress value={this.state.progress} max="100" /> <br />
+          {/* <progress value={this.state.progress} max="100" /> <br />
           <img
             src={
               this.state.headerImgUrl || "http://via.placeholder.com/400x300"
@@ -275,7 +286,7 @@ export class AddNews extends Component {
             alt="Uploaded images"
             height="300"
             width="400"
-          />
+          /> */}
         </div>
       );
     }

@@ -24,6 +24,7 @@ export class Home extends Component {
   }
   componentDidMount() {
     this.getData();
+    
   }
 
   getData = () => {

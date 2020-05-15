@@ -13,7 +13,7 @@ import PTRView from "react-native-pull-to-refresh";
 import { FlatList } from "react-native-gesture-handler";
 import { Button, Spinner } from "native-base";
 
-export class International extends Component {
+export class Political extends Component {
   constructor(props) {
     super(props);
 
@@ -35,7 +35,7 @@ export class International extends Component {
         let newsList = { ...data };
         let newState = [];
         for (let news in newsList) {
-          if (newsList[news].newsType == "International") {
+          if (newsList[news].newsType == "Political") {
             newState.push({
               id: news,
               header: newsList[news].header,
@@ -118,4 +118,4 @@ export class International extends Component {
   }
 }
 
-export default International;
+export default Political;

@@ -5,11 +5,13 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  FlatList,
+  VirtualizedList,
 } from "react-native";
-import PTRView from "react-native-pull-to-refresh";
 import NewsHeading from "./news/NewsHeading";
 import { firebasedb } from "../config/db";
+import PTRView from "react-native-pull-to-refresh";
+import { FlatList } from "react-native-gesture-handler";
+import { Button, Spinner } from "native-base";
 
 export class Weather extends Component {
   constructor(props) {
@@ -17,13 +19,17 @@ export class Weather extends Component {
 
     this.state = {
       newsList: [],
+      loading: true,
     };
   }
+  componentDidMount() {
+    this.getData();
+  }
 
-  componentDidMount = () => {
+  getData = () => {
     firebasedb
       .ref("/news")
-      .limitToFirst(50)
+      .limitToFirst(45)
       .on("value", (querySnapshot) => {
         let data = querySnapshot.val() ? querySnapshot.val() : {};
         let newsList = { ...data };
@@ -43,6 +49,7 @@ export class Weather extends Component {
         }
         this.setState({
           newsList: newState,
+          loading: false,
         });
       });
   };
@@ -55,36 +62,59 @@ export class Weather extends Component {
     });
   };
 
-  render() {
+  renderFlatList = () => {
     let copied = [...this.state.newsList];
     return (
-      <PTRView onRefresh={this.refresh}>
-        <ScrollView>
-          {/* {copied.reverse().map((news) => {
-        return (
-          <NewsHeading
-            news={news}
-            pressHandler={() =>
-              this.props.navigation.navigate("NewsDetails", { news: news })
-            }
-          />
-        );
-      })} */}
-
-          <FlatList
-            data={copied.reverse()}
-            renderItem={({ item }) => (
-              <NewsHeading
-                news={item}
-                pressHandler={() =>
-                  this.props.navigation.navigate("NewsDetails", { news: item })
-                }
-              />
-            )}
-          />
-        </ScrollView>
-      </PTRView>
+      <View>
+        <FlatList
+          data={copied.reverse()}
+          renderItem={({ item }) => (
+            <NewsHeading
+              news={item}
+              pressHandler={() =>
+                this.props.navigation.navigate("NewsDetails", {
+                  news: item,
+                })
+              }
+            />
+          )}
+          keyExtractor={(item) => item.id}
+          initialNumToRender={1}
+          maxToRenderPerBatch={1}
+          windowSize={2}
+          removeClippedSubviews={true}
+          // onEndReached={() => this.getData()}
+        />
+      </View>
     );
+  };
+
+  getItemCount = (data) => {
+    return 50;
+  };
+
+  render() {
+    let copied = [...this.state.newsList];
+
+    if (this.state.loading) {
+      return (
+        <View
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Spinner color="black" />
+        </View>
+      );
+    } else {
+      return (
+        <PTRView onRefresh={this.refresh}>
+          <ScrollView>{this.renderFlatList()}</ScrollView>
+        </PTRView>
+      );
+    }
   }
 }
 

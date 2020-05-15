@@ -3,7 +3,7 @@ import { firebasedb } from "../config/firebasedb";
 import OneNews from "./OneNews";
 import { Spinner } from "react-bootstrap";
 
-export class Home extends Component {
+export class Entertainment extends Component {
   constructor(props) {
     super(props);
 
@@ -14,14 +14,12 @@ export class Home extends Component {
   }
 
   componentDidMount = () => {
-    firebasedb
-      .ref("/news")
-      .limitToFirst(45)
-      .on("value", (querySnapshot) => {
-        let data = querySnapshot.val() ? querySnapshot.val() : {};
-        let newsList = { ...data };
-        let newState = [];
-        for (let news in newsList) {
+    firebasedb.ref("/news").on("value", (querySnapshot) => {
+      let data = querySnapshot.val() ? querySnapshot.val() : {};
+      let newsList = { ...data };
+      let newState = [];
+      for (let news in newsList) {
+        if (newsList[news].newsType == "Entertainment") {
           newState.push({
             id: news,
             header: newsList[news].header,
@@ -32,13 +30,14 @@ export class Home extends Component {
             date: newsList[news].date,
           });
         }
-        this.setState(
-          {
-            newsList: newState,
-          },
-          () => this.setState({ isLoading: false })
-        );
-      });
+      }
+      this.setState(
+        {
+          newsList: newState,
+        },
+        () => this.setState({ isLoading: false })
+      );
+    });
   };
 
   render() {
@@ -76,4 +75,4 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default Entertainment;

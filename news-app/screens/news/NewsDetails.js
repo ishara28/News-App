@@ -110,7 +110,17 @@ export class NewsDetails extends Component {
               );
             }
           })}
+          <View style={{ marginTop: 15 }}>
+            <Text style={{ marginHorizontal: 20, fontStyle: "italic" }}>
+              Published in{" "}
+              <Text style={{ color: "blue" }}>
+                {this.props.navigation.getParam("news").newsType}
+              </Text>
+            </Text>
+          </View>
         </View>
+
+        <View style={{ height: 200 }}></View>
       </ScrollView>
     );
   }

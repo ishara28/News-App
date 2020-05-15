@@ -11,7 +11,7 @@ import WeatherStack from "../stack/WeatherStack";
 import HomeStack from "../stack/HomeStack";
 import SportsStack from "../stack/SportsStack";
 import EntertainmentStack from "../stack/EntertainmentStack";
-
+import PoliticalStack from "../stack/PoliticalStack";
 const rootDrawNavigator = createDrawerNavigator(
   {
     Home: {
@@ -23,14 +23,17 @@ const rootDrawNavigator = createDrawerNavigator(
     International: {
       screen: InternationalStack,
     },
+    Political: {
+      screen: PoliticalStack,
+    },
     Sports: {
       screen: SportsStack,
     },
-    Weather: {
-      screen: WeatherStack,
-    },
     Entertainment: {
       screen: EntertainmentStack,
+    },
+    Weather: {
+      screen: WeatherStack,
     },
   },
   {

@@ -1,10 +1,16 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import React, { Component } from "react";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { connect } from "react-redux";
 import { setTheme } from "../redux/actions/Themes";
+import {
+  TouchableOpacity,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+} from "react-native-gesture-handler";
+import { Icon } from "native-base";
 
 export class Header extends Component {
   constructor(props) {
@@ -19,14 +25,36 @@ export class Header extends Component {
   render() {
     return (
       <View style={styles.header}>
-        <AntDesign
-          name="menu-fold"
-          size={28}
-          onPress={this.openMenu}
-          style={styles.icon}
-          color="#ddd"
-        />
-        <View>
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            // right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Icon
+            onPress={() => this.openMenu()}
+            type="AntDesign"
+            style={{ color: "#ddd" }}
+            size={25}
+            name="menu-fold"
+          />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Text style={styles.headerText}>{this.props.headerText}</Text>
         </View>
       </View>
@@ -40,8 +68,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    width: Dimensions.get("window").width - 30,
   },
   headerTT: {
     flex: 1,
@@ -49,13 +76,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    fontWeight: "bold",
+    fontWeight: "300",
     fontSize: RFPercentage(4),
     letterSpacing: 1,
     color: "#ddd",
   },
   icon: {
-    marginRight: 30,
+    marginLeft: 10,
   },
 });
 

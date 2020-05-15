@@ -10,8 +10,9 @@ import {
 } from "react-native";
 import { Icon, Footer } from "native-base";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import FlexImage from "react-native-flex-image";
+import * as OpenAnything from "react-native-openanything";
 
 export default class CustomDrawer extends Component {
   constructor() {
@@ -75,49 +76,12 @@ export default class CustomDrawer extends Component {
             {/*Setting up Navigation Options from option array using loop*/}
 
             <View style={{ width: "100%" }}>
-              {/* {this.items.map((item, key) => (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    backgroundColor:
-                      global.currentScreenIndex === key ? "" : "",
-                  }}
-                  key={key}
-                >
-                  <View style={{ flexDirection: "row" }}>
-                    <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
-                      <Icon
-                        name={item.navOptionThumb}
-                        style={{ color: "#ddd" }}
-                        size={25}
-                      />
-                    </View>
-
-                    <View style={{ flex: 6 }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: "bold",
-                          color:
-                            global.currentScreenIndex === key ? "#ddd" : "#ddd",
-                        }}
-                        onPress={() => {
-                          global.currentScreenIndex = key;
-                          this.props.navigation.navigate(item.screenToNavigate);
-                        }}
-                      >
-                        {item.navOptionName}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              ))} */}
-
               {/* Home Navigation  */}
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Home");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -141,19 +105,19 @@ export default class CustomDrawer extends Component {
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
                       }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("Home");
-                      }}
                     >
                       {"Home"}
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               {/* Local Navigation  */}
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Local");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -181,20 +145,20 @@ export default class CustomDrawer extends Component {
                         color: "white",
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
-                      }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("Local");
                       }}
                     >
                       {"Local"}
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               {/* International Navigation  */}
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("International");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -222,20 +186,20 @@ export default class CustomDrawer extends Component {
                         color: "white",
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
-                      }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("International");
                       }}
                     >
                       {"International"}
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
-              {/* Sports Navigation  */}
-              <View
+              {/* Political Navigation  */}
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Political");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -264,19 +228,60 @@ export default class CustomDrawer extends Component {
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
                       }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("Sports");
+                    >
+                      {"Political"}
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+              {/* Sports Navigation  */}
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Sports");
+                }}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  // backgroundColor: global.currentScreenIndex === key ? "" : "",
+                }}
+                // key={key}
+              >
+                <View style={{ flexDirection: "row" }}>
+                  <View style={{ marginRight: 10, marginLeft: 20, flex: 1 }}>
+                    <Icon
+                      name={"hand-pointing-right"}
+                      type="MaterialCommunityIcons"
+                      style={{ color: "#ddd" }}
+                      size={25}
+                    />
+                  </View>
+
+                  <View style={{ flex: 6 }}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "100",
+                        color: "white",
+                        // color:
+                        //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
                       }}
                     >
                       {"Sports"}
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               {/* Weather NAvigation  */}
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Weather");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -305,19 +310,19 @@ export default class CustomDrawer extends Component {
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
                       }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("Weather");
-                      }}
                     >
                       {"Weather"}
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
               {/* Entertainment NAvigation  */}
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  // global.currentScreenIndex = key;
+                  this.props.navigation.navigate("Entertainment");
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
@@ -347,15 +352,82 @@ export default class CustomDrawer extends Component {
                         // color:
                         //   global.currentScreenIndex === key ? "#ddd" : "#ddd",
                       }}
-                      onPress={() => {
-                        // global.currentScreenIndex = key;
-                        this.props.navigation.navigate("Entertainment");
-                      }}
                     >
                       {"Entertainment"}
                     </Text>
                   </View>
                 </View>
+              </TouchableOpacity>
+            </View>
+
+            {/* Icons  */}
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 20,
+                flex: 1,
+                marginBottom: 20,
+                marginLeft: 20,
+              }}
+            >
+              {/* <Text style={{ color: "#ddd" }}>Icons</Text> */}
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    OpenAnything.Web("https://twitter.com/colombo_times")
+                  }
+                >
+                  <Icon
+                    type="AntDesign"
+                    style={{ color: "#ddd" }}
+                    size={25}
+                    name="twitter"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    OpenAnything.Web(
+                      "https://www.facebook.com/ColomboTimesSriLanka/"
+                    )
+                  }
+                >
+                  <Icon
+                    type="AntDesign"
+                    style={{ color: "#ddd" }}
+                    size={25}
+                    name="facebook-square"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                  onPress={() => OpenAnything.Instagram("colombo_times")}
+                >
+                  <Icon
+                    type="Feather"
+                    style={{ color: "#ddd" }}
+                    size={25}
+                    name="instagram"
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flex: 1 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    OpenAnything.Web(
+                      "https://www.youtube.com/channel/UCvOp59os7jML3EuMl7C960Q?view_as=subscriber"
+                    )
+                  }
+                >
+                  <Icon
+                    type="FontAwesome"
+                    style={{ color: "#ddd" }}
+                    size={25}
+                    name="youtube-play"
+                  />
+                </TouchableOpacity>
               </View>
             </View>
             <View
