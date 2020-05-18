@@ -6,12 +6,12 @@ import { Ionicons } from "@expo/vector-icons";
 import Navigator from "./routes/drawer/RootDrawer";
 import configureStore from "./redux/Store";
 import { Provider } from "react-redux";
-import Test from "./test/Test";
 import * as Permissions from "expo-permissions";
 import { firebasedb } from "./config/db";
 import Constants from "expo-constants";
 import { Vibration, Platform, View } from "react-native";
 import { auth } from "firebase";
+import { testFN } from "./test/Test";
 
 const Store = configureStore();
 
@@ -26,12 +26,12 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    // firebase
-    //   .auth()
-    //   .signInAnonymously()
-    //   .then((user) => {
-    //     this.registerForPushNotificationsAsync(user);
-    //   });
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then((user) => {
+        this.registerForPushNotificationsAsync(user);
+      });
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
@@ -49,11 +49,12 @@ export default class App extends React.Component {
     //     }
     //     console.error(error);
     //   });
-    // auth().onAuthStateChanged((firebaseUser) => {
-    //   firebasedb.ref("users").push({
-    //     uid: firebaseUser.uid,
-    //   });
-    // });
+    auth().onAuthStateChanged((firebaseUser) => {
+      firebasedb.ref("users").push({
+        uid: firebaseUser.uid,
+        username: "Ishara",
+      });
+    });
   }
 
   registerForPushNotificationsAsync = async (user) => {
@@ -99,7 +100,16 @@ export default class App extends React.Component {
     return (
       <Provider store={Store}>
         <Container>
+          {/* <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <Text>Origin: {this.state.notification.origin}</Text>
+            <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+          </View>
+          <Button
+            title={"Press to Send Notification"}
+            onPress={() => this.sendPushNotification()}
+          /> */}
           <Navigator />
+          {/* <Test /> */}
         </Container>
       </Provider>
     );
