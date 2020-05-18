@@ -6,12 +6,12 @@ import { Ionicons } from "@expo/vector-icons";
 import Navigator from "./routes/drawer/RootDrawer";
 import configureStore from "./redux/Store";
 import { Provider } from "react-redux";
+import Test from "./test/Test";
 import * as Permissions from "expo-permissions";
 import { firebasedb } from "./config/db";
 import Constants from "expo-constants";
 import { Vibration, Platform, View } from "react-native";
 import { auth } from "firebase";
-import { testFN } from "./test/Test";
 
 const Store = configureStore();
 
@@ -52,7 +52,6 @@ export default class App extends React.Component {
     auth().onAuthStateChanged((firebaseUser) => {
       firebasedb.ref("users").push({
         uid: firebaseUser.uid,
-        username: "Ishara",
       });
     });
   }

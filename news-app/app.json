@@ -27,10 +27,8 @@
       "versionCode": 1
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "Colombo-Times"
+      "supportsTablet": true
     },
-    "description": "",
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "description": ""
   }
 }

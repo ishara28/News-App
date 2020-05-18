@@ -16,7 +16,7 @@ export class Home extends Component {
   componentDidMount = () => {
     firebasedb
       .ref("/news")
-      .limitToFirst(45)
+      .limitToLast(45)
       .on("value", (querySnapshot) => {
         let data = querySnapshot.val() ? querySnapshot.val() : {};
         let newsList = { ...data };
@@ -60,6 +60,7 @@ export class Home extends Component {
     } else {
       return (
         <div className="container">
+          {this.state.newsList.length}
           {copied.reverse().map(function (news) {
             return (
               <OneNews
