@@ -18,8 +18,58 @@ export class AddNews extends Component {
       progress: 0,
       isUploading: false,
       preview: [],
+      checkNotification: false,
+      userExpoTokens: [],
+      messages: [],
     };
   }
+
+  componentDidMount() {
+    firebasedb.ref("/users").on("value", (querySnapshot) => {
+      let data = querySnapshot.val() ? querySnapshot.val() : {};
+      let newsList = { ...data };
+      let newState = [];
+      for (let news in newsList) {
+        newState.push({
+          id: news,
+          expoToken: newsList[news].expoToken,
+        });
+      }
+      this.setState(
+        {
+          userExpoTokens: newState,
+        },
+        () => console.log(this.state.userExpoTokens)
+      );
+    });
+  }
+
+  setReadyForSendNotifications = () => {
+    if (this.state.checkNotification) {
+      var mes = [];
+      this.state.userExpoTokens.map((token) => {
+        mes.push({
+          to: token.expoToken,
+          sound: "default",
+          body: this.state.header,
+        });
+      });
+      this.setState({ messages: mes }, () => this.sendNot());
+    }
+  };
+
+  sendNot = () => {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.state.messages),
+    }).then(() => console.log("Done!"));
+  };
 
   handleChange = (e) => {
     if (e.target.files[0]) {
@@ -60,6 +110,7 @@ export class AddNews extends Component {
       //   new Date().getDate().toString(),
       date: Date.now(),
     });
+    this.setReadyForSendNotifications();
   };
 
   handleUpload = () => {
@@ -181,7 +232,9 @@ export class AddNews extends Component {
         {
           imagesUrls: [""],
         },
-        () => this.submitData()
+        () => {
+          this.submitData();
+        }
       );
     }
   };
@@ -251,6 +304,27 @@ export class AddNews extends Component {
                 }
               />
             </Form.Group>
+
+            <Form.Group
+              controlId="formBasicCheckbox"
+              style={{ textAlign: "left" }}
+            >
+              <Form.Check
+                type="checkbox"
+                label="Send Notification"
+                ref="check_me"
+                checked={this.state.checkNotification}
+                onChange={() =>
+                  this.setState((prevState) => {
+                    return {
+                      ...prevState,
+                      checkNotification: !prevState.checkNotification,
+                    };
+                  })
+                }
+              />
+            </Form.Group>
+
             <Form.Group controlId="exampleForm.ControlFile">
               <Form.Label style={{ float: "left" }}>
                 <b>Header Photo</b>

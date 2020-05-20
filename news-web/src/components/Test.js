@@ -1,98 +1,76 @@
 import React, { Component } from "react";
-import { storage, firebasedb } from "../config/firebasedb";
+import { firebasedb } from "../config/firebasedb";
+import axios from "axios";
 
-class Test extends Component {
+export class Test extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      username: "",
-      age: "",
-      url: "",
-      image: null,
-      progress: 0,
+      // messages: [
+      //   {
+      //     to: "ExponentPushToken[JQ8VecIOyjFNwMf5EIXOJW]",
+      //     sound: "default",
+      //     body: "New Note Added",
+      //   },
+      //   {
+      //     to: "ExponentPushToken[czSwidLuAyGoEL8jnrJ7pN]",
+      //     sound: "default",
+      //     body: "New Note Added",
+      //   },
+      // ],
+      userExpoTokens: [],
+      messages: [],
     };
   }
 
-  handleChange = (e) => {
-    if (e.target.files[0]) {
-      const image = e.target.files[0];
-      this.setState(() => ({ image }));
-    }
-  };
-  submitData = () => {
-    firebasedb.ref("user").push({
-      name: this.state.username,
-      age: this.state.age,
-      url: this.state.url,
+  componentDidMount() {
+    firebasedb.ref("/users").on("value", (querySnapshot) => {
+      let data = querySnapshot.val() ? querySnapshot.val() : {};
+      let newsList = { ...data };
+      let newState = [];
+      for (let news in newsList) {
+        newState.push({
+          id: news,
+          expoToken: newsList[news].expoToken,
+        });
+      }
+      this.setState(
+        {
+          userExpoTokens: newState,
+        },
+        () => console.log(this.state.userExpoTokens)
+      );
     });
+  }
+
+  setReadyForSendNotifications = () => {
+    var mes = [];
+    this.state.userExpoTokens.map((token) => {
+      mes.push({
+        to: token.expoToken,
+        sound: "default",
+        body: this.props.header,
+      });
+    });
+    this.setState({ messages: mes }, () => this.sendNot());
   };
 
-  handleUpload = () => {
-    const { image } = this.state;
-    const uploadTask = storage.ref("images/" + image.name).put(image);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        //Progress function...
-        const progress =
-          Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        this.setState({ progress });
+  sendNot = () => {
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
       },
-      (error) => {
-        //error function...
-        console.log(error);
-      },
-      () => {
-        //Complete function
-        storage
-          .ref("images")
-          .child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-            this.setState({ url });
-            this.submitData();
-          });
-      }
-    );
+      body: JSON.stringify(this.state.messages),
+    }).then(() => console.log("Done!"));
   };
 
   render() {
-    return (
-      <div
-        style={{
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          display: "flex  ",
-        }}
-      >
-        <progress value={this.state.progress} max="100" />
-        <input
-          type="text"
-          value={this.state.username}
-          placeholder="username"
-          onChange={(e) => this.setState({ username: e.target.value })}
-        />
-        <input
-          type="text"
-          value={this.state.age}
-          placeholder="age"
-          onChange={(e) => this.setState({ age: e.target.value })}
-        />
-        <input type="file" onChange={this.handleChange} />
-        <button onClick={this.handleUpload}>Upload</button>
-        <br /> <br />
-        <img
-          src={this.state.url || "http://via.placeholder.com/400x300"}
-          alt="Uploaded images"
-          height="300"
-          width="400"
-        />
-      </div>
-    );
+    return <div></div>;
   }
 }
 
