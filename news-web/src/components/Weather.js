@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { firebasedb } from "../config/firebasedb";
+import firebase from "firebase";
 import OneNews from "./OneNews";
 import { Spinner } from "react-bootstrap";
 
@@ -67,7 +68,36 @@ export class Weather extends Component {
               <OneNews
                 news={news}
                 handleDelete={() => {
-                  return firebasedb.ref("news").child(news.id).remove();
+                  firebasedb.ref("news").child(news.id).remove();
+                  console.log(news.headerImgUrl);
+                  var headerImgRef = firebase
+                    .storage()
+                    .refFromURL(news.headerImgUrl);
+                  headerImgRef
+                    .delete()
+                    .then(function () {
+                      // File deleted successfully
+                    })
+                    .catch(function (error) {
+                      // Uh-oh, an error occurred!
+                      console.log(error);
+                    });
+                  news.imagesUrls.map((url) => {
+                    if (url != "") {
+                      var imageRef = firebase.storage().refFromURL(url);
+                      imageRef
+                        .delete()
+                        .then(function () {
+                          console.log(
+                            "All Additional Images Deleted Succesffully!"
+                          );
+                        })
+                        .catch(function (error) {
+                          // Uh-oh, an error occurred!
+                          console.log(error);
+                        });
+                    }
+                  });
                 }}
               />
             );

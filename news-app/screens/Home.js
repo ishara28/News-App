@@ -11,7 +11,10 @@ import NewsHeading from "./news/NewsHeading";
 import { firebasedb } from "../config/db";
 import PTRView from "react-native-pull-to-refresh";
 import { FlatList } from "react-native-gesture-handler";
-import { Button, Spinner } from "native-base";
+import FlexImage from "react-native-flex-image";
+import { Button, Spinner, Icon } from "native-base";
+import TimeAgo from "react-native-timeago";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 export class Home extends Component {
   constructor(props) {
@@ -24,13 +27,12 @@ export class Home extends Component {
   }
   componentDidMount() {
     this.getData();
-    
   }
 
   getData = () => {
     firebasedb
       .ref("/news")
-      .limitToFirst(45)
+      .limitToLast(45)
       .on("value", (querySnapshot) => {
         let data = querySnapshot.val() ? querySnapshot.val() : {};
         let newsList = { ...data };
@@ -61,12 +63,58 @@ export class Home extends Component {
     });
   };
 
+  renderWelcomeNews = () => {
+    let firstNews = [...this.state.newsList].reverse()[0];
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() =>
+            this.props.navigation.navigate("NewsDetails", {
+              news: firstNews,
+            })
+          }
+        >
+          <View
+            style={{
+              flex: 1,
+              margin: 3,
+              borderRadius: 7,
+              overflow: "hidden",
+              marginHorizontal: 10,
+            }}
+          >
+            <FlexImage source={{ uri: firstNews.headerImgUrl }} />
+          </View>
+          <Text style={{ fontSize: 16, marginHorizontal: 10 }}>
+            {" "}
+            🔵 {firstNews.header}
+          </Text>
+          <View style={{ flex: 1, flexDirection: "row-reverse" }}>
+            <TimeAgo
+              time={firstNews.date}
+              style={{
+                fontSize: RFPercentage(1.8),
+                color: "#494646",
+                marginRight: 20,
+              }}
+            />
+            <Icon
+              type="Feather"
+              name="clock"
+              style={{ fontSize: RFPercentage(1.8), marginRight: 3 }}
+            />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   renderFlatList = () => {
     let copied = [...this.state.newsList];
     return (
       <View>
         <FlatList
-          data={copied.reverse()}
+          data={copied.reverse().slice(1)}
           renderItem={({ item }) => (
             <NewsHeading
               news={item}
@@ -78,7 +126,7 @@ export class Home extends Component {
             />
           )}
           keyExtractor={(item) => item.id}
-          initialNumToRender={1}
+          initialNumToRender={5}
           maxToRenderPerBatch={1}
           windowSize={2}
           removeClippedSubviews={true}
@@ -93,8 +141,6 @@ export class Home extends Component {
   };
 
   render() {
-    let copied = [...this.state.newsList];
-
     if (this.state.loading) {
       return (
         <View
@@ -105,11 +151,16 @@ export class Home extends Component {
           }}
         >
           <Spinner color="black" />
+          <Text>Loading...</Text>
         </View>
       );
     } else {
       return (
         <PTRView onRefresh={this.refresh}>
+          <View style={{ marginHorizontal: 30 }}>
+            <FlexImage source={require("../assets/longLogo.png")} />
+          </View>
+          <ScrollView>{this.renderWelcomeNews()}</ScrollView>
           <ScrollView>{this.renderFlatList()}</ScrollView>
         </PTRView>
       );

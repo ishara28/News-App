@@ -12,6 +12,7 @@ import { firebasedb } from "./config/db";
 import Constants from "expo-constants";
 import { Vibration, Platform, View } from "react-native";
 import { auth } from "firebase";
+import firebase from "firebase";
 
 const Store = configureStore();
 
@@ -22,41 +23,23 @@ export default class App extends React.Component {
       isReady: false,
       expoPushToken: "",
       notification: {},
+      users: [],
     };
   }
 
   async componentDidMount() {
-    firebase
-      .auth()
-      .signInAnonymously()
-      .then((user) => {
-        this.registerForPushNotificationsAsync(user);
-      });
+    console.log("CDM");
+    this.registerForPushNotificationsAsync(); /////////////
+
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
-    // auth()
-    //   .signInAnonymously()
-    //   .then(() => {
-    //     console.log("User signed in anonymously");
-    //   })
-    //   .catch((error) => {
-    //     if (error.code === "auth/operation-not-allowed") {
-    //       console.log("Enable anonymous in your firebase console.");
-    //     }
-    //     console.error(error);
-    //   });
-    auth().onAuthStateChanged((firebaseUser) => {
-      firebasedb.ref("users").push({
-        uid: firebaseUser.uid,
-      });
-    });
   }
 
-  registerForPushNotificationsAsync = async (user) => {
+  registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
       const { status: existingStatus } = await Permissions.getAsync(
         Permissions.NOTIFICATIONS
@@ -74,11 +57,24 @@ export default class App extends React.Component {
       }
       token = await Notifications.getExpoPushTokenAsync();
       console.log(token);
-      var updates = {};
-      updates["/expoToken"] = token;
-      firebasedb.ref("users").child(user.uid).update(updates);
+      this.setState({ expoPushToken: token });
+      firebasedb.ref("/users").on("value", (querySnapshot) => {
+        let data = querySnapshot.val() ? querySnapshot.val() : {};
+        let newsList = { ...data };
+        let newState = [];
+        for (let news in newsList) {
+          newState.push(newsList[news].expoToken);
+        }
+        this.setState({ users: newState }, () => {
+          if (!this.state.users.includes(token)) {
+            firebasedb.ref("users").push({
+              expoToken: token,
+            });
+          }
+        });
+      });
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -90,6 +86,13 @@ export default class App extends React.Component {
       });
     }
   };
+  handleNotification = (notification) => {
+    console.log("Not Handler");
+    let { origin, data } = notification;
+    if (origin == "selected") {
+      Navigate.nav("Political");
+    }
+  };
 
   render() {
     if (!this.state.isReady) {
@@ -99,17 +102,9 @@ export default class App extends React.Component {
     return (
       <Provider store={Store}>
         <Container>
-          {/* <View style={{ alignItems: "center", justifyContent: "center" }}>
-            <Text>Origin: {this.state.notification.origin}</Text>
-            <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
-          </View>
-          <Button
-            title={"Press to Send Notification"}
-            onPress={() => this.sendPushNotification()}
-          /> */}
           <Navigator />
-          {/* <Test /> */}
         </Container>
+        {/* <Test /> */}
       </Provider>
     );
   }

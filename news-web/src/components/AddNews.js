@@ -51,7 +51,9 @@ export class AddNews extends Component {
         mes.push({
           to: token.expoToken,
           sound: "default",
+          title: this.state.newsType,
           body: this.state.header,
+          _displayInForeground: true,
         });
       });
       this.setState({ messages: mes }, () => this.sendNot());
@@ -149,7 +151,7 @@ export class AddNews extends Component {
               this.setState({ headerImgUrl: url });
               // this.submitData();
               this.handleUploadMultipleImages();
-              this.setState({ isUploading: false });
+              // this.setState({ isUploading: false });
             });
         }
       );

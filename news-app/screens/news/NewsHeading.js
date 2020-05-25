@@ -33,14 +33,18 @@ export class NewsHeading extends React.PureComponent {
             />
           </View>
           <View style={{ flex: 2, justifyContent: "center" }}>
-            <Text>{this.props.news.header}</Text>
+            <Text>
+              ⚫{this.props.news.header.length <= 50 && this.props.news.header}
+              {this.props.news.header.length > 50 &&
+                this.props.news.header.slice(0, 50) + "..."}
+            </Text>
           </View>
         </TouchableOpacity>
         <View style={{ flex: 1, flexDirection: "row-reverse" }}>
           <TimeAgo
             time={this.props.news.date}
             style={{
-              fontSize: RFPercentage(1.5),
+              fontSize: RFPercentage(1.8),
               color: "#494646",
               marginRight: 20,
             }}

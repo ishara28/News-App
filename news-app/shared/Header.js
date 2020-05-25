@@ -25,7 +25,7 @@ export class Header extends Component {
   render() {
     return (
       <View style={styles.header}>
-        <View
+        {/* <View
           style={{
             position: "absolute",
             top: 0,
@@ -35,15 +35,17 @@ export class Header extends Component {
             justifyContent: "center",
             alignItems: "center",
           }}
-        >
-          <Icon
+        > */}
+        <TouchableOpacity>
+          <AntDesign
             onPress={() => this.openMenu()}
             type="AntDesign"
             style={{ color: "#ddd" }}
             size={25}
             name="menu-fold"
           />
-        </View>
+        </TouchableOpacity>
+        {/* </View> */}
         <View
           style={{
             position: "absolute",

@@ -27,31 +27,30 @@ export class Weather extends Component {
   }
 
   getData = () => {
-    firebasedb
-      .ref("/news")
-      .limitToFirst(45)
-      .on("value", (querySnapshot) => {
-        let data = querySnapshot.val() ? querySnapshot.val() : {};
-        let newsList = { ...data };
-        let newState = [];
-        for (let news in newsList) {
-          if (newsList[news].newsType == "Weather") {
-            newState.push({
-              id: news,
-              header: newsList[news].header,
-              headerImgUrl: newsList[news].headerImgUrl,
-              imagesUrls: newsList[news].imagesUrls,
-              newsType: newsList[news].newsType,
-              newsContent: newsList[news].newsContent,
-              date: newsList[news].date,
-            });
-          }
+    firebasedb.ref("/news").on("value", (querySnapshot) => {
+      let data = querySnapshot.val() ? querySnapshot.val() : {};
+      let newsList = { ...data };
+      let newState = [];
+      let count = 0;
+      for (let news in newsList) {
+        if (newsList[news].newsType == "Weather" && count < 46) {
+          count++;
+          newState.push({
+            id: news,
+            header: newsList[news].header,
+            headerImgUrl: newsList[news].headerImgUrl,
+            imagesUrls: newsList[news].imagesUrls,
+            newsType: newsList[news].newsType,
+            newsContent: newsList[news].newsContent,
+            date: newsList[news].date,
+          });
         }
-        this.setState({
-          newsList: newState,
-          loading: false,
-        });
+      }
+      this.setState({
+        newsList: newState,
+        loading: false,
       });
+    });
   };
 
   refresh = () => {
@@ -79,7 +78,7 @@ export class Weather extends Component {
             />
           )}
           keyExtractor={(item) => item.id}
-          initialNumToRender={1}
+          initialNumToRender={5}
           maxToRenderPerBatch={1}
           windowSize={2}
           removeClippedSubviews={true}
@@ -106,6 +105,7 @@ export class Weather extends Component {
           }}
         >
           <Spinner color="black" />
+          <Text>Loading...</Text>
         </View>
       );
     } else {
