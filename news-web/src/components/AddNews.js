@@ -15,6 +15,7 @@ export class AddNews extends Component {
       headerImgUrl: "",
       images: [],
       imagesUrls: [],
+      videoLink: "",
       progress: 0,
       isUploading: false,
       preview: [],
@@ -45,6 +46,15 @@ export class AddNews extends Component {
   }
 
   setReadyForSendNotifications = () => {
+    let notifyNews = {
+      date: Date.now(),
+      header: this.state.header,
+      headerImgUrl: this.state.headerImgUrl,
+      imagesUrls: this.state.imagesUrls,
+      newsContent: this.state.newsContent,
+      newsType: this.state.newsType,
+      videoLink: this.state.videoLink,
+    };
     if (this.state.checkNotification) {
       var mes = [];
       this.state.userExpoTokens.map((token) => {
@@ -54,6 +64,10 @@ export class AddNews extends Component {
           title: this.state.newsType,
           body: this.state.header,
           _displayInForeground: true,
+          data: {
+            news: notifyNews,
+            newsNotify: true,
+          },
         });
       });
       this.setState({ messages: mes }, () => this.sendNot());
@@ -104,12 +118,13 @@ export class AddNews extends Component {
       imagesUrls: this.state.imagesUrls,
       newsType: this.state.newsType,
       newsContent: this.state.newsContent,
-      // date:
-      //   new Date().getFullYear().toString() +
-      //   "/" +
-      //   new Date().getMonth().toString() +
-      //   "/" +
-      //   new Date().getDate().toString(),
+      videoLink: this.state.videoLink,
+      dateToDesplay:
+        new Date().getFullYear().toString() +
+        "/" +
+        new Date().getMonth().toString() +
+        "/" +
+        new Date().getDate().toString(),
       date: Date.now(),
     });
     this.setReadyForSendNotifications();
@@ -233,6 +248,7 @@ export class AddNews extends Component {
       this.setState(
         {
           imagesUrls: [""],
+          isUploading: false,
         },
         () => {
           this.submitData();
@@ -346,6 +362,17 @@ export class AddNews extends Component {
                 label={"Choose Photos"}
               />
             </Form.Group>
+            <Form.Group controlId="exampleForm.ControlInput1">
+              <Form.Label style={{ float: "left" }}>
+                <b>Video Link</b>
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Video Link here..."
+                value={this.state.videoLink}
+                onChange={(e) => this.setState({ videoLink: e.target.value })}
+              />
+            </Form.Group>
             <Button
               style={{ backgroundColor: "black" }}
               onClick={this.handleUpload}
@@ -354,15 +381,6 @@ export class AddNews extends Component {
             </Button>
           </Form>
           <br />
-          {/* <progress value={this.state.progress} max="100" /> <br />
-          <img
-            src={
-              this.state.headerImgUrl || "http://via.placeholder.com/400x300"
-            }
-            alt="Uploaded images"
-            height="300"
-            width="400"
-          /> */}
         </div>
       );
     }

@@ -1,6 +1,14 @@
 import React, { Component } from "react";
 import { FaHandPointRight } from "react-icons/fa";
-import { Button, Col, Row, Card, Accordion, Modal } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Row,
+  Card,
+  Accordion,
+  Modal,
+  Badge,
+} from "react-bootstrap";
 import EditNews from "./EditNews";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -36,30 +44,36 @@ export class OneNews extends Component {
       <div className="container" style={{ width: "70%" }}>
         <div className="row" style={{ marginTop: 20 }}>
           <Col>
-            <img width="100%" src={this.props.news.headerImgUrl} alt="" />
+            <img width="70%" src={this.props.news.headerImgUrl} alt="" />
           </Col>
           <Col xs={7}>
             <Row>
-              <FaHandPointRight size={30} />
-              <h3>{this.props.news.header}</h3>
+              {/* <FaHandPointRight size={30} /> */}
+              <h5 style={{ textAlign: "left" }}>
+                <Badge style={{ marginRight: 3 }} variant="success">
+                  {this.props.news.newsNumber}
+                </Badge>
+                {this.props.news.header}
+              </h5>
             </Row>
-            <h5 style={{ float: "right" }}>{this.props.news.date}</h5>
+            {/* <h5 style={{ float: "right" }}>{this.props.news.date}</h5> */}
             <Row>
               <Button
                 variant="primary"
+                size="sm"
                 onClick={() => this.setState({ modalShow: true })}
               >
-                Edit
+                Edit News
               </Button>{" "}
               <span>&nbsp;&nbsp;</span>
               <span>&nbsp;&nbsp;</span>
-              <Button variant="danger" onClick={this.confirmDltAlert}>
-                Delete
+              <Button variant="danger" size="sm" onClick={this.confirmDltAlert}>
+                Delete News
               </Button>
               {"           "}
               <span>&nbsp;&nbsp;</span>
-              <p style={{ textDecoration: "underline" }}>
-                {this.props.news.newsType}
+              <p>
+                <Badge variant="secondary">{this.props.news.newsType}</Badge>
               </p>
             </Row>
           </Col>
@@ -83,7 +97,7 @@ export class OneNews extends Component {
             </Accordion.Collapse>
           </Card>
         </Accordion> */}
-        <hr style={{ borderWidth: 5, borderColor: "black" }} />
+        <hr style={{ borderWidth: 3, borderColor: "black" }} />
         <EditNews
           news={this.props.news}
           show={this.state.modalShow}

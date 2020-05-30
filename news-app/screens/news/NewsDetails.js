@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import FlexImage from "react-native-flex-image";
-import { View, Text, Linking } from "react-native";
+import { View, Text, Linking, Share, StyleSheet, Platform } from "react-native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { H1, H2, H3, Icon, Row } from "native-base";
+import { H1, H2, H3, Icon, Row, Button, Footer, FooterTab } from "native-base";
 import TimeAgo from "react-native-timeago";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, FlatList } from "react-native-gesture-handler";
+import WebView from "react-native-webview";
 
 export class NewsDetails extends Component {
   constructor(props) {
@@ -32,6 +33,36 @@ export class NewsDetails extends Component {
         </View>
       );
     });
+  };
+
+  onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          "𝕮𝖔𝖑𝖔𝖒𝖇𝖔 𝕿𝖎𝖒𝖊𝖘 ©" +
+          "\n \n" +
+          "🔵" +
+          this.props.navigation.getParam("news").header +
+          "\n \n " +
+          this.props.navigation.getParam("news").newsContent +
+          "\n \n" +
+          this.props.navigation.getParam("news").videoLink +
+          "\n \n" +
+          "www.colombotimes.lk",
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   render() {
@@ -96,27 +127,39 @@ export class NewsDetails extends Component {
           </Text>
         </View>
         <View>
-          {this.props.navigation.getParam("news").imagesUrls.map((url) => {
-            if (url != "") {
-              return (
+          <FlatList
+            data={this.props.navigation.getParam("news").imagesUrls}
+            renderItem={({ item }) =>
+              item != "" && (
                 <View
                   style={{
                     overflow: "hidden",
                     borderRadius: 7,
-                    margin: 10,
+                    margin: 15,
                     marginHorizontal: 25,
                   }}
                 >
-                  <FlexImage
-                    source={{
-                      uri: url,
-                    }}
-                    alt="HJ"
-                  />
+                  <FlexImage source={{ uri: item }} />
                 </View>
-              );
+              )
             }
-          })}
+            initialNumToRender={2}
+            maxToRenderPerBatch={1}
+          />
+          {this.props.navigation.getParam("news").videoLink != "" && (
+            <View style={{ height: 200, marginHorizontal: 10 }}>
+              <WebView
+              
+                allowsFullscreenVideo={true}
+                style={styles.WebViewContainer}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                source={{
+                  uri: this.props.navigation.getParam("news").videoLink,
+                }}
+              />
+            </View>
+          )}
           <View style={{ marginTop: 15 }}>
             <Text style={{ marginHorizontal: 20, fontStyle: "italic" }}>
               Published in{" "}
@@ -126,56 +169,45 @@ export class NewsDetails extends Component {
             </Text>
           </View>
         </View>
-        <View style={{ marginHorizontal: 20, marginTop: 10 }}>
-          <Row>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="facebook"
-                type="Entypo"
-                style={{ color: "#768BB7", fontSize: 40 }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="twitter-square"
-                type="FontAwesome"
-                style={{ color: "#88C5F3", fontSize: 40 }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="whatsapp-square"
-                type="FontAwesome5"
-                style={{ color: "#5AC754", fontSize: 40 }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="facebook-messenger"
-                type="FontAwesome5"
-                style={{ color: "#4DA9FF", fontSize: 40 }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="viber"
-                type="FontAwesome5"
-                style={{ color: "#A486BB", fontSize: 40 }}
-              />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Icon
-                name="sms"
-                type="FontAwesome5"
-                style={{ color: "#98D27D", fontSize: 40 }}
-              />
-            </View>
-          </Row>
+        <View style={{ marginHorizontal: 50 }}>
+          <FlexImage source={require("../../assets/longLogo.png")} />
         </View>
-        <View style={{ height: 200 }}></View>
+
+        {/* <View style={{ height: 20 }}></View> */}
+        <Button
+          full
+          style={{
+            backgroundColor: "black",
+            marginHorizontal: 20,
+            borderRadius: 7,
+          }}
+          onPress={this.onShare}
+        >
+          <Row
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 18 }}>Share</Text>
+            <Icon
+              style={{ color: "white", fontSize: 18 }}
+              type="Entypo"
+              name="share"
+            />
+          </Row>
+        </Button>
+        <View style={{ height: 10 }}></View>
       </ScrollView>
     );
   }
 }
 
 export default NewsDetails;
+
+const styles = StyleSheet.create({
+  WebViewContainer: {
+    marginTop: Platform.OS == "android" ? 20 : 0,
+  },
+});

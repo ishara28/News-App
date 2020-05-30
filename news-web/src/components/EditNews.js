@@ -14,6 +14,7 @@ export class EditNews extends Component {
       headerImgUrl: "",
       images: [],
       imagesUrls: [],
+      videoLink: "",
       imagesNewUrls: [],
       newsImages: [],
       progress: 0,
@@ -29,6 +30,7 @@ export class EditNews extends Component {
       newsContent: this.props.news.newsContent,
       headerImgUrl: this.props.news.headerImgUrl,
       imagesUrls: this.props.news.imagesUrls,
+      videoLink: this.props.news.videoLink,
     });
   };
 
@@ -63,6 +65,7 @@ export class EditNews extends Component {
       newsType: this.state.newsType,
       newsContent: this.state.newsContent,
       imagesUrls: this.state.imagesUrls,
+      videoLink: this.state.videoLink,
     };
 
     firebasedb
@@ -275,6 +278,17 @@ export class EditNews extends Component {
                   onChange={this.handleChangeMultipleImages}
                   multiple
                   label={"Choose Photos"}
+                />
+              </Form.Group>
+              <Form.Group controlId="exampleForm.ControlInput1">
+                <Form.Label>
+                  <b>Video Link</b>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Video Link here..."
+                  value={this.state.videoLink}
+                  onChange={(e) => this.setState({ videoLink: e.target.value })}
                 />
               </Form.Group>
               <div>

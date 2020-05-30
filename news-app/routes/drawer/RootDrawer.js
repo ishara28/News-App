@@ -1,8 +1,8 @@
 import { createDrawerNavigator } from "react-navigation-drawer";
-import React from "react";
+import React, { Component } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Icon } from "native-base";
-import { Image, Dimensions } from "react-native";
+import { Image, Dimensions, View } from "react-native";
 import CustomDrawer from "../../shared/CustomeDrawer";
 import { createAppContainer } from "react-navigation";
 import LocalStack from "../stack/LocalStack";
@@ -12,6 +12,8 @@ import HomeStack from "../stack/HomeStack";
 import SportsStack from "../stack/SportsStack";
 import EntertainmentStack from "../stack/EntertainmentStack";
 import PoliticalStack from "../stack/PoliticalStack";
+import { AppLoading, Notifications } from "expo";
+
 const rootDrawNavigator = createDrawerNavigator(
   {
     Home: {

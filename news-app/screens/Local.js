@@ -20,6 +20,7 @@ export class Local extends Component {
     this.state = {
       newsList: [],
       loading: true,
+      notification: {},
     };
   }
   componentDidMount() {
@@ -43,6 +44,7 @@ export class Local extends Component {
             newsType: newsList[news].newsType,
             newsContent: newsList[news].newsContent,
             date: newsList[news].date,
+            videoLink: newsList[news].videoLink,
           });
         }
       }

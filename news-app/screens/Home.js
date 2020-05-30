@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   VirtualizedList,
+  Vibration,
 } from "react-native";
 import NewsHeading from "./news/NewsHeading";
 import { firebasedb } from "../config/db";
@@ -15,6 +16,7 @@ import FlexImage from "react-native-flex-image";
 import { Button, Spinner, Icon } from "native-base";
 import TimeAgo from "react-native-timeago";
 import { RFPercentage } from "react-native-responsive-fontsize";
+import { AppLoading, Notifications } from "expo";
 
 export class Home extends Component {
   constructor(props) {
@@ -23,11 +25,28 @@ export class Home extends Component {
     this.state = {
       newsList: [],
       loading: true,
+      notification: {},
     };
   }
   componentDidMount() {
     this.getData();
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
   }
+
+  _handleNotification = (notification) => {
+    console.log("Handle notification in Home");
+    Vibration.vibrate();
+    console.log(notification);
+    let { origin, data } = notification;
+    if (origin === "selected" && data.newsNotify) {
+      this.props.navigation.navigate("NewsDetails", {
+        news: data.news,
+      });
+    }
+    this.setState({ notification: notification });
+  };
 
   getData = () => {
     firebasedb
@@ -46,6 +65,7 @@ export class Home extends Component {
             newsType: newsList[news].newsType,
             newsContent: newsList[news].newsContent,
             date: newsList[news].date,
+            videoLink: newsList[news].videoLink,
           });
         }
         this.setState({
