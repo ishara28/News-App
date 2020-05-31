@@ -34,6 +34,7 @@ export class Home extends Component {
             newsType: newsList[news].newsType,
             newsContent: newsList[news].newsContent,
             date: newsList[news].date,
+            videoLink: newsList[news].videoLink,
           });
           count++;
         }

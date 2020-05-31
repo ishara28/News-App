@@ -26,6 +26,7 @@ export class Home extends Component {
       newsList: [],
       loading: true,
       notification: {},
+      newsNotify: {},
     };
   }
   componentDidMount() {
@@ -36,11 +37,31 @@ export class Home extends Component {
   }
 
   _handleNotification = (notification) => {
+    //Code when notification size is larger than accepted!
+    // Vibration.vibrate();
+    // let { origin, data } = notification;
+    // firebasedb.ref("news").on("value", (snapshot) => {
+    //   snapshot.forEach((question) => {
+    //     var state = question.val();
+    //     if (state.header == data.header) {
+    //       this.setState({ newsNotify: state }, () => {
+    //         if (origin === "selected" && data.header) {
+    //           this.props.navigation.navigate("NewsDetails", {
+    //             news: this.state.newsNotify,
+    //           });
+    //         }
+    //       });
+    //     }
+    //   });
+    // });
+    // this.setState({ notification: notification });
+
+    //Code when normal not comes
     console.log("Handle notification in Home");
     Vibration.vibrate();
     console.log(notification);
     let { origin, data } = notification;
-    if (origin === "selected" && data.newsNotify) {
+    if (origin === "selected" && data.news) {
       this.props.navigation.navigate("NewsDetails", {
         news: data.news,
       });

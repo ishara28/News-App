@@ -6,7 +6,6 @@ import { Ionicons } from "@expo/vector-icons";
 import Navigator from "./routes/drawer/RootDrawer";
 import configureStore from "./redux/Store";
 import { Provider } from "react-redux";
-import Test from "./test/Test";
 import * as Permissions from "expo-permissions";
 import { firebasedb } from "./config/db";
 import Constants from "expo-constants";
@@ -30,9 +29,7 @@ export default class App extends React.Component {
   async componentDidMount() {
     console.log("CDM");
     this.registerForPushNotificationsAsync();
-    // this._notificationSubscription = Notifications.addListener(
-    //   this._handleNotification
-    // );
+
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
       Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
@@ -89,17 +86,6 @@ export default class App extends React.Component {
     }
   };
 
-  // _handleNotification = (notification) => {
-  //   console.log("Handle notification");
-  //   Vibration.vibrate();
-  //   console.log(notification);
-  //   let { origin, data } = notification;
-  //   if (origin === "selected") {
-  //     this.props.navigation.navigate("NewsDetails");
-  //   }
-  //   this.setState({ notification: notification });
-  // };
-
   render() {
     if (!this.state.isReady) {
       return <AppLoading />;
@@ -109,7 +95,6 @@ export default class App extends React.Component {
       <Provider store={Store}>
         <Container>
           <Navigator />
-          {/* <Test /> */}
         </Container>
       </Provider>
     );

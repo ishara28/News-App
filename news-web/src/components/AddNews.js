@@ -66,7 +66,7 @@ export class AddNews extends Component {
           _displayInForeground: true,
           data: {
             news: notifyNews,
-            newsNotify: true,
+            // header: this.state.header,
           },
         });
       });
